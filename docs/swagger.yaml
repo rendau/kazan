@@ -1,0 +1,153 @@
+definitions:
+  dopTypes.ErrRep:
+    properties:
+      desc:
+        type: string
+      error_code:
+        type: string
+      fields:
+        additionalProperties:
+          type: string
+        type: object
+    type: object
+  rest.SaveRepSt:
+    properties:
+      path:
+        type: string
+    type: object
+  rest.SaveReqSt:
+    properties:
+      dir:
+        type: string
+      extract_zip:
+        type: boolean
+      file:
+        type: string
+      no_cut:
+        type: boolean
+    required:
+    - dir
+    - file
+    type: object
+info:
+  contact: {}
+paths:
+  /kvs/:key:
+    delete:
+      parameters:
+      - description: key
+        in: path
+        name: key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dopTypes.ErrRep'
+      summary: Remove file.
+      tags:
+      - kvs
+    get:
+      parameters:
+      - description: key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: download
+        in: query
+        name: query
+        type: boolean
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dopTypes.ErrRep'
+      summary: Get file.
+      tags:
+      - kvs
+    post:
+      parameters:
+      - description: key
+        in: path
+        name: key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dopTypes.ErrRep'
+      summary: Set file.
+      tags:
+      - kvs
+  /static:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: body
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/rest.SaveReqSt'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.SaveRepSt'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dopTypes.ErrRep'
+      summary: Upload and save file.
+      tags:
+      - static
+  /static/:path:
+    get:
+      parameters:
+      - description: path
+        in: path
+        name: path
+        required: true
+        type: string
+      - in: query
+        name: blur
+        type: number
+      - in: query
+        name: download
+        type: string
+      - in: query
+        name: grayscale
+        type: boolean
+      - in: query
+        name: h
+        type: integer
+      - in: query
+        name: m
+        type: string
+      - in: query
+        name: w
+        type: integer
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dopTypes.ErrRep'
+      summary: Get or download file.
+      tags:
+      - static
+swagger: "2.0"

@@ -1,0 +1,241 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/kvs/:key": {
+            "get": {
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "kvs"
+                ],
+                "summary": "Get file.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "download",
+                        "name": "query",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dopTypes.ErrRep"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "kvs"
+                ],
+                "summary": "Set file.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dopTypes.ErrRep"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "kvs"
+                ],
+                "summary": "Remove file.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dopTypes.ErrRep"
+                        }
+                    }
+                }
+            }
+        },
+        "/static": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "static"
+                ],
+                "summary": "Upload and save file.",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/rest.SaveReqSt"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rest.SaveRepSt"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dopTypes.ErrRep"
+                        }
+                    }
+                }
+            }
+        },
+        "/static/:path": {
+            "get": {
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "static"
+                ],
+                "summary": "Get or download file.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "path",
+                        "name": "path",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "name": "blur",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "download",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "grayscale",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "h",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "m",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "w",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dopTypes.ErrRep"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dopTypes.ErrRep": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "type": "string"
+                },
+                "error_code": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "rest.SaveRepSt": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "rest.SaveReqSt": {
+            "type": "object",
+            "required": [
+                "dir",
+                "file"
+            ],
+            "properties": {
+                "dir": {
+                    "type": "string"
+                },
+                "extract_zip": {
+                    "type": "boolean"
+                },
+                "file": {
+                    "type": "string"
+                },
+                "no_cut": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

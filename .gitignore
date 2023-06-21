@@ -1,0 +1,11 @@
+*.log
+*.tar
+*.tar.gz
+*.tar.bz2
+.idea
+release/*
+build/
+test_dir/
+conf.yml
+wm.png
+/svc

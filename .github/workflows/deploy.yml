@@ -1,0 +1,35 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - disable
+jobs:
+  build:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    env:
+      OWNER: rendau
+      IMAGE: kazan
+      IMAGE_TAG: 1
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.19.0'
+
+      - run: go mod download
+
+      - run: go install github.com/swaggo/swag/cmd/swag@v1.8.4
+
+      - run: make swdoc
+
+      - run: make
+
+      - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $ --password-stdin
+
+      - run: docker build -t ghcr.io/$OWNER/$IMAGE:$IMAGE_TAG .
+
+      - run: docker push ghcr.io/$OWNER/$IMAGE:$IMAGE_TAG
